@@ -1,4 +1,4 @@
-package com.salmanwahed.contactsapp.data.repository
+package com.salmanwahed.contactsapp.domain.repository
 
 import com.salmanwahed.contactsapp.domain.model.Contact
 import kotlinx.coroutines.flow.Flow

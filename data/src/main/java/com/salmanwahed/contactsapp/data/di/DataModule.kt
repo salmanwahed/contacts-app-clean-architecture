@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import com.salmanwahed.contactsapp.data.local.db.ContactDao
 import com.salmanwahed.contactsapp.data.local.db.ContactDatabase
+import com.salmanwahed.contactsapp.data.repository.ContactRepositoryImpl
+import com.salmanwahed.contactsapp.domain.repository.ContactRepository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,22 +20,28 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataModule {
+abstract class DataModule {
 
-  @Provides
+  @Binds
   @Singleton
-  fun provideContactDatabase(@ApplicationContext context: Context): ContactDatabase {
-    return Room.databaseBuilder(
-      context,
-      ContactDatabase::class.java,
-      "contacts.db"
-    ).build()
-  }
+  abstract fun bindContactRepository(contactRepositoryImpl: ContactRepositoryImpl): ContactRepository
 
-  @Provides
-  @Singleton
-  fun provideContactDao(contactDatabase: ContactDatabase): ContactDao {
-    return contactDatabase.contactDao
+  companion object {
+    @Provides
+    @Singleton
+    fun provideContactDatabase(@ApplicationContext context: Context): ContactDatabase {
+      return Room.databaseBuilder(
+        context,
+        ContactDatabase::class.java,
+        "contacts.db"
+      ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideContactDao(contactDatabase: ContactDatabase): ContactDao {
+      return contactDatabase.contactDao
+    }
   }
 
 }
