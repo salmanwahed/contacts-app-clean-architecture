@@ -8,9 +8,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -24,25 +32,47 @@ import com.salmanwahed.contactsapp.domain.model.Contact
  * Created by salman on 6/3/25.
  */
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactListScreen(viewModel: ContactListViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        if (state.isLoading) {
-            CircularProgressIndicator()
-        } else if (state.error != null) {
-            Text(
-                text = state.error ?: "An unknown error occurred",
-                color = MaterialTheme.colorScheme.error
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Contacts") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             )
-        } else {
-            ContactLazyList(contacts = state.contacts)
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {  }) {
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = "Add Contact"
+                )
+            }
+        }
+    ){
+        innerPadding ->
+        Box(
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
+            contentAlignment = Alignment.Center
+        ) {
+            if (state.isLoading) {
+                CircularProgressIndicator()
+            } else if (state.error != null) {
+                Text(
+                    text = state.error ?: "An unknown error occurred",
+                    color = MaterialTheme.colorScheme.error
+                )
+            } else {
+                ContactLazyList(contacts = state.contacts)
+            }
         }
     }
+
 }
 
 @Composable
