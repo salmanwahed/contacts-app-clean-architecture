@@ -26,6 +26,14 @@ class ContactListViewModel @Inject constructor(private val getContactsUseCase: G
         loadContacts()
     }
 
+    private fun onUIEvent(uiEvent: ContactListUIEvents) {
+        when(uiEvent) {
+            is ContactListUIEvents.AddContactClicked -> {
+
+            }
+        }
+    }
+
     private fun loadContacts() {
         getContactsUseCase()
             .onStart {
