@@ -5,9 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.salmanwahed.contactsapp.core.navigation.Screen
 import com.salmanwahed.contactsapp.features.add_edit_contact.AddEditContactScreen
 import com.salmanwahed.contactsapp.features.contact_list.ContactListScreen
@@ -34,7 +36,14 @@ fun AppNavigation() {
         composable(Screen.ContactList.route) {
             ContactListScreen()
         }
-        composable(Screen.AddEditContact.route) {
+        composable(Screen.AddEditContact.route,
+            arguments = listOf(
+                navArgument("id") {
+                type = NavType.IntType
+                defaultValue = -1
+                }
+            )
+        ) {
             AddEditContactScreen()
         }
     }

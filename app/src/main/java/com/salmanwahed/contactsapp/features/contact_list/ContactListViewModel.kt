@@ -18,17 +18,21 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class ContactListViewModel @Inject constructor(private val getContactsUseCase: GetContactsUseCase): ViewModel() {
+class ContactListViewModel @Inject constructor(
+    private val getContactsUseCase: GetContactsUseCase
+): ViewModel() {
     private val _state = MutableStateFlow(ContactListState())
     val state: StateFlow<ContactListState> = _state.asStateFlow()
+
+    private val _uiEvent = MutableStateFlow(ContactListState())
 
     init {
         loadContacts()
     }
 
-    private fun onUIEvent(uiEvent: ContactListUIEvents) {
+    private fun onUIEvent(uiEvent: ContactListUIEvent) {
         when(uiEvent) {
-            is ContactListUIEvents.AddContactClicked -> {
+            is ContactListUIEvent.AddContactClicked -> {
 
             }
         }

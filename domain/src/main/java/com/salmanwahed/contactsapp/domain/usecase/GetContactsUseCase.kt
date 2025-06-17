@@ -11,6 +11,7 @@ import javax.inject.Inject
 
 class GetContactsUseCase @Inject constructor(private val repository: ContactRepository) {
     operator fun invoke(): Flow<List<Contact>> {
+        // Business logic
         return repository.getAllContacts()
     }
 }
