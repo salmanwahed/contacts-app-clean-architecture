@@ -1,5 +1,6 @@
 package com.salmanwahed.contactsapp.features.contact_list
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.salmanwahed.contactsapp.domain.model.Contact
+import com.salmanwahed.contactsapp.features.ContactAction
 
 /**
  * Created by salman on 6/3/25.
@@ -45,6 +47,20 @@ fun ContactListScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
 
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is ContactListUIEvent.AddContactClicked -> {
+                    TODO()
+                }
+
+                else -> {
+                    Log.d("ContactListScreen", "Unknown event: $event")
+
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -57,7 +73,7 @@ fun ContactListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {  }) {
+            FloatingActionButton(onClick = { viewModel.onAction(ContactAction.AddContactClicked) }) {
                 Icon(
                     Icons.Default.Add,
                     contentDescription = "Add Contact"

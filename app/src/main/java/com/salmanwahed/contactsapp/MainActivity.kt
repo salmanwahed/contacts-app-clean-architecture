@@ -34,7 +34,7 @@ fun AppNavigation() {
     val navController = rememberNavController()
     NavHost(navController, startDestination = Screen.ContactList.route) {
         composable(Screen.ContactList.route) {
-            ContactListScreen()
+            ContactListScreen(navController=navController)
         }
         composable(Screen.AddEditContact.route,
             arguments = listOf(
@@ -44,7 +44,7 @@ fun AppNavigation() {
                 }
             )
         ) {
-            AddEditContactScreen()
+            AddEditContactScreen(navController=navController)
         }
     }
 }
