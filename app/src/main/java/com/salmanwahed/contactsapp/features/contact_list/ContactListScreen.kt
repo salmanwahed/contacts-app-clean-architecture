@@ -1,9 +1,12 @@
 package com.salmanwahed.contactsapp.features.contact_list
 
 import android.util.Log
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -81,7 +85,9 @@ fun ContactListScreen(
     ){
         innerPadding ->
         Box(
-            modifier = Modifier.fillMaxSize().padding(innerPadding),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
             contentAlignment = Alignment.Center
         ) {
             if (state.isLoading) {
@@ -92,7 +98,7 @@ fun ContactListScreen(
                     color = MaterialTheme.colorScheme.error
                 )
             } else {
-                ContactLazyList(contacts = state.contacts)
+                ContactLazyList(contacts = state.contacts, viewModel=viewModel)
             }
         }
     }
@@ -102,14 +108,24 @@ fun ContactListScreen(
 @Composable
 fun ContactLazyList(
     contacts: List<Contact>,
-    modifier: Modifier = Modifier
+    viewModel: ContactListViewModel,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp)
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(items = contacts, key = { contact -> contact.id }){ contact ->
-            ContactLazyListItem(contact = contact)
+        items(items = contacts, key = { contact -> contact.id }) { contact ->
+            ContactLazyListItem(
+                contact = contact,
+                onItemClick = {
+                    viewModel.onAction(ContactListAction.AddEditContactClicked(contact.id))
+                },
+                onSwipeToDelete = {
+                    viewModel.onAction(ContactListAction.DeleteContactSwiped(contact))
+                }
+            )
         }
     }
 }
@@ -117,20 +133,29 @@ fun ContactLazyList(
 @Composable
 fun ContactLazyListItem(
     contact: Contact,
+    onItemClick: () -> Unit,
+    onSwipeToDelete: () -> Unit,
     modifier: Modifier = Modifier
 ){
-    Column(
-        modifier = modifier.fillMaxWidth()
-            .padding(vertical = 8.dp)
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onItemClick)
     ) {
-        Text(
-            text = "${contact.firstName} ${contact.lastName}",
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Text(
-            text = contact.phoneNumber,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Text(
+                text = "${contact.firstName} ${contact.lastName}",
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Text(
+                text = contact.phoneNumber,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
     }
 }

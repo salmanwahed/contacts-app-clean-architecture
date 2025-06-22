@@ -3,7 +3,6 @@ package com.salmanwahed.contactsapp.features.add_edit_contact
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.salmanwahed.contactsapp.domain.exception.InvalidContactException
 import com.salmanwahed.contactsapp.domain.exception.InvalidEmailException
 import com.salmanwahed.contactsapp.domain.exception.InvalidFirstNameException
 import com.salmanwahed.contactsapp.domain.exception.InvalidPhoneNumberException
@@ -37,7 +36,8 @@ class AddEditContactViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     init {
-        val id: Int? = savedStateHandle["id"]
+        val contactId: String? = savedStateHandle.get("contactId")
+        val id : Int? = contactId?.toIntOrNull() ?: -1
         if (id != null && id != -1) {
             _state.update { it.copy(isLoading = true) }
             viewModelScope.launch {

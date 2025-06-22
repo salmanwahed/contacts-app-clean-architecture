@@ -41,7 +41,7 @@ class ContactListViewModel @Inject constructor(
     fun onAction(action: ContactListAction) {
         when(action) {
             is ContactListAction.AddEditContactClicked -> {
-                val route = Screen.AddEditContact.createRoute(null)
+                val route = Screen.AddEditContact.createRoute(action.contactId)
                 sendUiEvent(ContactListUIEvent.AddContactClicked(route))
             }
             else -> {
