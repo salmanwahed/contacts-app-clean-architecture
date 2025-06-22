@@ -8,7 +8,6 @@ import com.salmanwahed.contactsapp.domain.model.Contact
 import com.salmanwahed.contactsapp.domain.usecase.AddContactUseCase
 import com.salmanwahed.contactsapp.domain.usecase.GetContactByIdUseCase
 import com.salmanwahed.contactsapp.domain.usecase.UpdateContactUseCase
-import com.salmanwahed.contactsapp.features.ContactAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,13 +57,13 @@ class AddEditContactViewModel @Inject constructor(
         }
     }
 
-    fun onAction(action: ContactAction) {
+    fun onAction(action: AddEditContactAction) {
         when (action) {
-            is ContactAction.FirstNameChanged -> _state.update { it.copy(firstName = action.firstName) }
-            is ContactAction.LastNameChanged -> _state.update { it.copy(lastName = action.lastName) }
-            is ContactAction.PhoneNumberChanged -> _state.update { it.copy(phoneNumber = action.phone) }
-            is ContactAction.EmailChanged -> _state.update { it.copy(email = action.email) }
-            ContactAction.SaveContactClicked -> saveContact()
+            is AddEditContactAction.FirstNameChanged -> _state.update { it.copy(firstName = action.firstName) }
+            is AddEditContactAction.LastNameChanged -> _state.update { it.copy(lastName = action.lastName) }
+            is AddEditContactAction.PhoneNumberChanged -> _state.update { it.copy(phoneNumber = action.phone) }
+            is AddEditContactAction.EmailChanged -> _state.update { it.copy(email = action.email) }
+            AddEditContactAction.SaveContactClicked -> saveContact()
             else -> Unit
         }
     }

@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.salmanwahed.contactsapp.features.ContactAction
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -78,7 +77,7 @@ fun AddEditContactScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { viewModel.onAction(ContactAction.SaveContactClicked) }) {
+            FloatingActionButton(onClick = { viewModel.onAction(AddEditContactAction.SaveContactClicked) }) {
                 Icon(Icons.Default.Done, contentDescription = "Save Contact")
             }
         }
@@ -109,7 +108,7 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
     ) {
         OutlinedTextField(
             value = state.firstName,
-            onValueChange = { viewModel.onAction(ContactAction.FirstNameChanged(it)) },
+            onValueChange = { viewModel.onAction(AddEditContactAction.FirstNameChanged(it)) },
             label = { Text("First Name") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
@@ -117,7 +116,7 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
         )
         OutlinedTextField(
             value = state.lastName?: "",
-            onValueChange = { viewModel.onAction(ContactAction.LastNameChanged(it)) },
+            onValueChange = { viewModel.onAction(AddEditContactAction.LastNameChanged(it)) },
             label = { Text("Last Name") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
@@ -125,7 +124,7 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
         )
         OutlinedTextField(
             value = state.phoneNumber,
-            onValueChange = { viewModel.onAction(ContactAction.PhoneNumberChanged(it)) },
+            onValueChange = { viewModel.onAction(AddEditContactAction.PhoneNumberChanged(it)) },
             label = { Text("Phone Number") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
@@ -133,7 +132,7 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
         )
         OutlinedTextField(
             value = state.email?: "",
-            onValueChange = { viewModel.onAction(ContactAction.EmailChanged(it)) },
+            onValueChange = { viewModel.onAction(AddEditContactAction.EmailChanged(it)) },
             label = { Text("Email (Optional)") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),

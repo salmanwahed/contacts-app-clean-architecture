@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.salmanwahed.contactsapp.domain.model.Contact
-import com.salmanwahed.contactsapp.features.ContactAction
 
 /**
  * Created by salman on 6/3/25.
@@ -72,7 +71,7 @@ fun ContactListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { viewModel.onAction(ContactAction.AddEditContactClicked(null)) }) {
+            FloatingActionButton(onClick = { viewModel.onAction(ContactListAction.AddEditContactClicked(null)) }) {
                 Icon(
                     Icons.Default.Add,
                     contentDescription = "Add Contact"
