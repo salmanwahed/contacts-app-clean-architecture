@@ -28,6 +28,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -111,7 +113,9 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
             value = state.firstName,
             onValueChange = { viewModel.onAction(AddEditContactAction.FirstNameChanged(it)) },
             label = { Text("First Name") },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().onFocusChanged {
+                viewModel.onAction(AddEditContactAction.FocusChanged("firstName", it.isFocused))
+            },
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
             singleLine = true,
             isError = state.firstNameError != null,
@@ -129,7 +133,9 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
             value = state.lastName?: "",
             onValueChange = { viewModel.onAction(AddEditContactAction.LastNameChanged(it)) },
             label = { Text("Last Name") },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().onFocusChanged {
+                viewModel.onAction(AddEditContactAction.FocusChanged("lastName", it.isFocused))
+            },
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
             singleLine = true
         )
@@ -137,7 +143,9 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
             value = state.phoneNumber,
             onValueChange = { viewModel.onAction(AddEditContactAction.PhoneNumberChanged(it)) },
             label = { Text("Phone Number") },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().onFocusChanged {
+                viewModel.onAction(AddEditContactAction.FocusChanged("phoneNumber", it.isFocused))
+            },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             singleLine = true,
             isError = state.phoneNumberError != null,
@@ -155,7 +163,9 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
             value = state.email?: "",
             onValueChange = { viewModel.onAction(AddEditContactAction.EmailChanged(it)) },
             label = { Text("Email (Optional)") },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().onFocusChanged {
+                viewModel.onAction(AddEditContactAction.FocusChanged("email", it.isFocused))
+            },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             singleLine = true
         )

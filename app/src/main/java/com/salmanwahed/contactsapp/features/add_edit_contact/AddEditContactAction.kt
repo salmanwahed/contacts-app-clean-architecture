@@ -10,4 +10,5 @@ sealed interface AddEditContactAction {
   data class PhoneNumberChanged(val phone: String) : AddEditContactAction
   data class EmailChanged(val email: String) : AddEditContactAction
   data object SaveContactClicked : AddEditContactAction
+  data class FocusChanged(val fieldName: String, val isFocused: Boolean) : AddEditContactAction
 }

@@ -66,6 +66,15 @@ class AddEditContactViewModel @Inject constructor(
             is AddEditContactAction.LastNameChanged -> _state.update { it.copy(lastName = action.lastName) }
             is AddEditContactAction.PhoneNumberChanged -> _state.update { it.copy(phoneNumber = action.phone) }
             is AddEditContactAction.EmailChanged -> _state.update { it.copy(email = action.email) }
+            is AddEditContactAction.FocusChanged -> {
+                if (action.isFocused) {
+                    when(action.fieldName) {
+                        "firstName" -> _state.update { it.copy(firstNameError = null) }
+                        "phoneNumber" -> _state.update { it.copy(phoneNumberError = null) }
+                        "email" -> _state.update { it.copy(emailError = null) }
+                    }
+                }
+            }
             is AddEditContactAction.SaveContactClicked -> saveContact()
             else -> Unit
         }
