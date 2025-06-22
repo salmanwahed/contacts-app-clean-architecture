@@ -1,6 +1,5 @@
 package com.salmanwahed.contactsapp.features.add_edit_contact
 
-import android.os.Message
 import com.salmanwahed.contactsapp.domain.model.Contact
 
 /**

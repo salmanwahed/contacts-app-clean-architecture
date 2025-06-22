@@ -4,6 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.salmanwahed.contactsapp.domain.exception.InvalidContactException
+import com.salmanwahed.contactsapp.domain.exception.InvalidEmailException
+import com.salmanwahed.contactsapp.domain.exception.InvalidFirstNameException
+import com.salmanwahed.contactsapp.domain.exception.InvalidPhoneNumberException
 import com.salmanwahed.contactsapp.domain.model.Contact
 import com.salmanwahed.contactsapp.domain.usecase.AddContactUseCase
 import com.salmanwahed.contactsapp.domain.usecase.GetContactByIdUseCase
@@ -63,7 +66,7 @@ class AddEditContactViewModel @Inject constructor(
             is AddEditContactAction.LastNameChanged -> _state.update { it.copy(lastName = action.lastName) }
             is AddEditContactAction.PhoneNumberChanged -> _state.update { it.copy(phoneNumber = action.phone) }
             is AddEditContactAction.EmailChanged -> _state.update { it.copy(email = action.email) }
-            AddEditContactAction.SaveContactClicked -> saveContact()
+            is AddEditContactAction.SaveContactClicked -> saveContact()
             else -> Unit
         }
     }
@@ -86,9 +89,14 @@ class AddEditContactViewModel @Inject constructor(
                 }
                 sendUiEvent(AddEditContactUIEvent.NavigateBack)
                 sendUiEvent(AddEditContactUIEvent.ShowSnackbar("Contact saved successfully"))
-            } catch (e: InvalidContactException) {
-                sendUiEvent(AddEditContactUIEvent.ShowSnackbar(e.message))
+            } catch (e: InvalidFirstNameException) {
+                _state.update { it.copy(firstNameError = e.message) }
+            } catch (e: InvalidPhoneNumberException) {
+                _state.update { it.copy(phoneNumberError = e.message) }
+            } catch (e: InvalidEmailException) {
+                _state.update { it.copy(emailError = e.message) }
             }
+
         }
     }
 

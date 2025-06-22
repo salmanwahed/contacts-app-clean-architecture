@@ -15,6 +15,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -58,7 +59,7 @@ fun AddEditContactScreen(
                     viewModel.saveContact()
                 }
                 is AddEditContactUIEvent.ShowSnackbar -> {
-                    snackbarHostState.showSnackbar(message = "Contact saved!")
+                    snackbarHostState.showSnackbar(message = event.message)
                 }
             }
         }
@@ -112,7 +113,17 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
             label = { Text("First Name") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
-            singleLine = true
+            singleLine = true,
+            isError = state.firstNameError != null,
+            supportingText = {
+                if (state.firstNameError != null){
+                    Text(
+                        text = state.firstNameError,
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
         )
         OutlinedTextField(
             value = state.lastName?: "",
@@ -128,7 +139,17 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
             label = { Text("Phone Number") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-            singleLine = true
+            singleLine = true,
+            isError = state.phoneNumberError != null,
+            supportingText = {
+                if (state.phoneNumberError != null) {
+                    Text(
+                        text = state.phoneNumberError,
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
         )
         OutlinedTextField(
             value = state.email?: "",
