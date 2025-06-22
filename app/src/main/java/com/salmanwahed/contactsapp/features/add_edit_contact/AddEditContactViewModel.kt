@@ -85,13 +85,13 @@ class AddEditContactViewModel @Inject constructor(
             try {
                 val currentState = _state.value
                 val contact = Contact(
-                    id = currentState.id ?: 0,
+                    id = currentState.id ?: -1,
                     firstName = currentState.firstName,
                     lastName = currentState.lastName,
                     phoneNumber = currentState.phoneNumber,
                     email = currentState.email?.trim().takeIf { email -> email.isNullOrBlank()}
                 )
-                if (currentState.id == null) {
+                if (currentState.id == -1) {
                     addContactUseCase(contact)
                 } else {
                     updateContactUseCase(contact)

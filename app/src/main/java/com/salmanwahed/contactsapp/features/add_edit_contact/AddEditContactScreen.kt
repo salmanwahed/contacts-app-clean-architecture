@@ -110,7 +110,7 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
     ) {
         OutlinedTextField(
             value = state.firstName,
-            onValueChange = { viewModel.onAction(AddEditContactAction.FirstNameChanged(it)) },
+            onValueChange = { firstName -> viewModel.onAction(AddEditContactAction.FirstNameChanged(firstName = firstName)) },
             label = { Text("First Name") },
             modifier = Modifier.fillMaxWidth().onFocusChanged {
                 viewModel.onAction(AddEditContactAction.FocusChanged("firstName", it.isFocused))
@@ -130,7 +130,7 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
         )
         OutlinedTextField(
             value = state.lastName?: "",
-            onValueChange = { viewModel.onAction(AddEditContactAction.LastNameChanged(it)) },
+            onValueChange = { lastName -> viewModel.onAction(AddEditContactAction.LastNameChanged(lastName = lastName)) },
             label = { Text("Last Name") },
             modifier = Modifier.fillMaxWidth().onFocusChanged {
                 viewModel.onAction(AddEditContactAction.FocusChanged("lastName", it.isFocused))
@@ -140,7 +140,7 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
         )
         OutlinedTextField(
             value = state.phoneNumber,
-            onValueChange = { viewModel.onAction(AddEditContactAction.PhoneNumberChanged(it)) },
+            onValueChange = { phoneNumber -> viewModel.onAction(AddEditContactAction.PhoneNumberChanged(phone = phoneNumber)) },
             label = { Text("Phone Number") },
             modifier = Modifier.fillMaxWidth().onFocusChanged {
                 viewModel.onAction(AddEditContactAction.FocusChanged("phoneNumber", it.isFocused))
@@ -160,7 +160,7 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
         )
         OutlinedTextField(
             value = state.email?: "",
-            onValueChange = { viewModel.onAction(AddEditContactAction.EmailChanged(it)) },
+            onValueChange = { email -> viewModel.onAction(AddEditContactAction.EmailChanged(email = email)) },
             label = { Text("Email (Optional)") },
             modifier = Modifier.fillMaxWidth().onFocusChanged {
                 viewModel.onAction(AddEditContactAction.FocusChanged("email", it.isFocused))
