@@ -117,8 +117,8 @@ fun AddEditContactForm(state: AddEditContactState, viewModel: AddEditContactView
         )
         OutlinedTextField(
             value = state.lastName?: "",
-            onValueChange = { viewModel.onAction(ContactAction.FirstNameChanged(it)) },
-            label = { Text("First Name") },
+            onValueChange = { viewModel.onAction(ContactAction.LastNameChanged(it)) },
+            label = { Text("Last Name") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
             singleLine = true

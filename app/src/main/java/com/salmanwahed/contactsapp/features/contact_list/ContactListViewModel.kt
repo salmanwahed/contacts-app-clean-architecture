@@ -3,6 +3,7 @@ package com.salmanwahed.contactsapp.features.contact_list
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.salmanwahed.contactsapp.core.navigation.Screen
 import com.salmanwahed.contactsapp.domain.usecase.GetContactsUseCase
 import com.salmanwahed.contactsapp.features.ContactAction
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,8 +40,9 @@ class ContactListViewModel @Inject constructor(
 
     fun onAction(action: ContactAction) {
         when(action) {
-            is ContactAction.AddContactClicked -> {
-                sendUiEvent(ContactListUIEvent.AddContactClicked)
+            is ContactAction.AddEditContactClicked -> {
+                val route = Screen.AddEditContact.createRoute(null)
+                sendUiEvent(ContactListUIEvent.AddContactClicked(route))
             }
             else -> {
                 Log.d("ContactListViewModel", "Unknown action: $action")

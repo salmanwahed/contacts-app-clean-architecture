@@ -6,7 +6,10 @@ package com.salmanwahed.contactsapp.core.navigation
 
 sealed class Screen(val route: String) {
   data object ContactList : Screen("contact_list_screen")
-  data object AddEditContact : Screen("add_edit_contact_screen") {
-    fun createRoute(id: Int?) = "add_edit_contact_screen?id==${id ?: -1}"
+
+  data object AddEditContact : Screen("add_edit_contact_screen?contactId={contactId}") {
+    fun createRoute(contactId: Int?): String {
+      return "add_edit_contact_screen?contactId=${contactId ?: -1}"
+    }
   }
 }

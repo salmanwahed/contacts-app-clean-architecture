@@ -51,9 +51,8 @@ fun ContactListScreen(
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is ContactListUIEvent.AddContactClicked -> {
-                    TODO()
+                    navController.navigate(event.route)
                 }
-
                 else -> {
                     Log.d("ContactListScreen", "Unknown event: $event")
 
@@ -73,7 +72,7 @@ fun ContactListScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { viewModel.onAction(ContactAction.AddContactClicked) }) {
+            FloatingActionButton(onClick = { viewModel.onAction(ContactAction.AddEditContactClicked(null)) }) {
                 Icon(
                     Icons.Default.Add,
                     contentDescription = "Add Contact"

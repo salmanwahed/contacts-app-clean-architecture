@@ -7,8 +7,7 @@ import com.salmanwahed.contactsapp.domain.model.Contact
  */
 
 sealed interface ContactAction {
-    data object AddContactClicked : ContactAction
-    data class EditContactClicked(val contactId: Int) : ContactAction
+    data class AddEditContactClicked(val contactId: Int? = null) : ContactAction
     data class DeleteContactSwiped(val contact: Contact) : ContactAction
     data object UndoDeleteClicked : ContactAction
     data class FirstNameChanged(val firstName: String) : ContactAction

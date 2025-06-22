@@ -5,5 +5,7 @@ package com.salmanwahed.contactsapp.features.contact_list
  */
 
 sealed interface ContactListUIEvent {
-  data object AddContactClicked: ContactListUIEvent
+  data class AddContactClicked(val route: String) : ContactListUIEvent
+  data class ShowSnackbar(val message: String, val action: String? = null): ContactListUIEvent
+  data object NavigateBack : ContactListUIEvent
 }
