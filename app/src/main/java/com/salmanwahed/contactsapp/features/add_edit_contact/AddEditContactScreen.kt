@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.salmanwahed.contactsapp.core.components.SuccessDialog
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -64,6 +65,14 @@ fun AddEditContactScreen(
                 }
             }
         }
+    }
+
+    if (state.isSuccessDialogVisible) {
+        SuccessDialog(
+            onDismiss = { viewModel.onAction(AddEditContactAction.DismissisSuccessDialog) },
+            onConfirm = { viewModel.onAction(AddEditContactAction.ConfirmSuccessDialog) },
+            mesage = "The contact has been updated successfully"
+        )
     }
 
     Scaffold(

@@ -1,5 +1,6 @@
 package com.salmanwahed.contactsapp.features.add_edit_contact
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -66,6 +67,11 @@ class AddEditContactViewModel @Inject constructor(
             is AddEditContactAction.LastNameChanged -> _state.update { it.copy(lastName = action.lastName) }
             is AddEditContactAction.PhoneNumberChanged -> _state.update { it.copy(phoneNumber = action.phone) }
             is AddEditContactAction.EmailChanged -> _state.update { it.copy(email = action.email) }
+            is AddEditContactAction.DismissisSuccessDialog -> _state.update { it.copy(isSuccessDialogVisible = false) }
+            is AddEditContactAction.ConfirmSuccessDialog -> {
+                _state.update { it.copy(isSuccessDialogVisible = false) }
+                sendUiEvent(AddEditContactUIEvent.NavigateBack)
+            }
             is AddEditContactAction.FocusChanged -> {
                 if (action.isFocused) {
                     when(action.fieldName) {
@@ -89,15 +95,16 @@ class AddEditContactViewModel @Inject constructor(
                     firstName = currentState.firstName,
                     lastName = currentState.lastName,
                     phoneNumber = currentState.phoneNumber,
-                    email = currentState.email?.trim().takeIf { email -> email.isNullOrBlank()}
+                    email = currentState.email
                 )
-                if (currentState.id == -1) {
+                if (contact.id == -1) {
+                    Log.i("Contact -> Add", contact.toString())
                     addContactUseCase(contact)
                 } else {
+                    Log.i("Contact -> Update", contact.toString())
                     updateContactUseCase(contact)
                 }
-                sendUiEvent(AddEditContactUIEvent.NavigateBack)
-                sendUiEvent(AddEditContactUIEvent.ShowSnackbar("Contact saved successfully"))
+                _state.update { it.copy(isSuccessDialogVisible = true) }
             } catch (e: InvalidFirstNameException) {
                 _state.update { it.copy(firstNameError = e.message) }
             } catch (e: InvalidPhoneNumberException) {
