@@ -23,12 +23,13 @@ fun AppNavigation() {
         composable(route = Screen.AddEditContact.route,
             arguments = listOf(
                 navArgument("id") {
-                    type = NavType.IntType
-                    defaultValue = -1
+                    type = NavType.StringType
+                    nullable = true
                 }
             )
-        ) {
-            AddEditContactScreen(navController=navController)
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id")
+            AddEditContactScreen(navController=navController, id=id)
         }
     }
 }

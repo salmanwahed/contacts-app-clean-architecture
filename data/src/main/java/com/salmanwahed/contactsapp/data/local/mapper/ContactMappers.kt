@@ -20,7 +20,7 @@ fun ContactEntity.toDomain(): Contact {
 
 fun Contact.toEntity(): ContactEntity {
     return ContactEntity(
-        id = this.id,
+        id = this.id ?: -1,
         firstName = this.firstName,
         lastName = this.lastName,
         phoneNumber = this.phoneNumber,

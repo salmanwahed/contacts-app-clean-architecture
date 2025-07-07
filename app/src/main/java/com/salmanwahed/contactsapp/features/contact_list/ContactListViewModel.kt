@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.salmanwahed.contactsapp.core.navigation.Screen
 import com.salmanwahed.contactsapp.domain.usecase.GetContactsUseCase
-import com.salmanwahed.contactsapp.features.add_edit_contact.AddEditContactAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,11 +40,11 @@ class ContactListViewModel @Inject constructor(
     fun onAction(action: ContactListAction) {
         when(action) {
             is ContactListAction.AddEditContactClicked -> {
-                val route = Screen.AddEditContact.createRoute(action.contactId)
+                val route = Screen.AddEditContact.createRoute(action.id)
                 sendUiEvent(ContactListUIEvent.AddContactClicked(route))
             }
             else -> {
-                Log.d("ContactListViewModel", "Unknown action: $action")
+                Log.i(TAG, "Unknown action: $action")
             }
         }
     }
@@ -67,5 +66,9 @@ class ContactListViewModel @Inject constructor(
         viewModelScope.launch {
             _uiEvent.send(event)
         }
+    }
+
+    companion object {
+        const val TAG = "ContactApp"
     }
 }

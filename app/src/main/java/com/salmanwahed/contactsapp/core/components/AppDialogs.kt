@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,11 +30,18 @@ import androidx.compose.ui.unit.dp
  * Created by salman on 6/23/25.
  */
 
+
+enum class AlertType {
+    SUCCESS,
+    FAILURE
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SuccessDialog(
+fun AlertDialog(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
+    alertType: AlertType,
     mesage: String
 ) {
     BasicAlertDialog(onDismissRequest = onDismiss) {
@@ -45,7 +53,11 @@ fun SuccessDialog(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(Icons.Default.Done, contentDescription = "Success")
+                if (alertType == AlertType.SUCCESS) {
+                    Icon(Icons.Default.Done, contentDescription = "SUCCESS")
+                }else {
+                    Icon(Icons.Default.Warning, contentDescription = "FAILURE")
+                }
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
@@ -76,5 +88,5 @@ fun SuccessDialog(
 @Preview
 @Composable
 fun SuccessDialogPreview() {
-    SuccessDialog(onDismiss = {}, onConfirm = {}, mesage = "The contact has been updated successfully")
+    AlertDialog(onDismiss = {}, onConfirm = {}, alertType = AlertType.SUCCESS, mesage = "The contact has been updated successfully")
 }

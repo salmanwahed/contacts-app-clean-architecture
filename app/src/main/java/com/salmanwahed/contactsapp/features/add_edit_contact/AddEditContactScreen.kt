@@ -35,7 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.salmanwahed.contactsapp.core.components.SuccessDialog
+import com.salmanwahed.contactsapp.core.components.AlertDialog
+import com.salmanwahed.contactsapp.core.components.AlertType
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -46,12 +47,16 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun AddEditContactScreen(
     navController: NavController,
+    id: String?,
     viewModel: AddEditContactViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(key1 = true) {
+        if (!id.isNullOrEmpty()) {
+            viewModel.initWithId(id.toInt())
+        }
         viewModel.uiEvent.collectLatest { event ->
             when (event) {
                 is AddEditContactUIEvent.NavigateBack -> {
@@ -68,11 +73,27 @@ fun AddEditContactScreen(
     }
 
     if (state.isSuccessDialogVisible) {
-        SuccessDialog(
-            onDismiss = { viewModel.onAction(AddEditContactAction.DismissisSuccessDialog) },
-            onConfirm = { viewModel.onAction(AddEditContactAction.ConfirmSuccessDialog) },
-            mesage = "The contact has been updated successfully"
-        )
+        val errorMessage = listOf(
+            state.firstNameError,
+            state.lastNameError,
+            state.emailError,
+            state.phoneNumberError
+        ).firstOrNull{ !it.isNullOrBlank() }
+        if (errorMessage.isNullOrBlank()) {
+            AlertDialog(
+                onDismiss = { viewModel.onAction(AddEditContactAction.DismissisSuccessDialog) },
+                onConfirm = { viewModel.onAction(AddEditContactAction.ConfirmSuccessDialog) },
+                alertType = AlertType.SUCCESS,
+                mesage = "The contact has been updated successfully"
+            )
+        }else {
+            AlertDialog(
+                onDismiss = { viewModel.onAction(AddEditContactAction.DismissisSuccessDialog) },
+                onConfirm = { viewModel.onAction(AddEditContactAction.ConfirmSuccessDialog) },
+                alertType = AlertType.FAILURE,
+                mesage = errorMessage
+            )
+        }
     }
 
     Scaffold(
@@ -88,7 +109,9 @@ fun AddEditContactScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { viewModel.onAction(AddEditContactAction.SaveContactClicked) }) {
+            FloatingActionButton(onClick = {
+                viewModel.onAction(AddEditContactAction.SaveContactClicked)
+            }) {
                 Icon(Icons.Default.Done, contentDescription = "Save Contact")
             }
         }

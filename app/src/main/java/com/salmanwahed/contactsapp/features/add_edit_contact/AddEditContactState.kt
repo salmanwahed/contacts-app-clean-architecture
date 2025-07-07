@@ -11,7 +11,7 @@ data class AddEditContactState(
     val email: String? = "",
     val id: Int? = null, // Null if adding, non-null if editing
     val pageTitle: String = "Add Contact",
-    val isLoading: Boolean = false, // For loading the contact to edit
+    val isLoading: Boolean = false,
 
     // Error Messages
     val firstNameError: String? = null,

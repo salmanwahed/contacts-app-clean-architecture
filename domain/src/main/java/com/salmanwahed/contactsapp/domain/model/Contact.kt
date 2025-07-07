@@ -5,7 +5,7 @@ package com.salmanwahed.contactsapp.domain.model
  */
 
 data class Contact(
-  val id: Int = 0,
+  var id: Int? = null,
   val firstName: String,
   val lastName: String? = null,
   val phoneNumber: String,

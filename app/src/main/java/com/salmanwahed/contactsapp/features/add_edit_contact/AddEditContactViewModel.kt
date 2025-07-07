@@ -1,11 +1,10 @@
 package com.salmanwahed.contactsapp.features.add_edit_contact
 
 import android.util.Log
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.salmanwahed.contactsapp.domain.exception.InvalidContactException
 import com.salmanwahed.contactsapp.domain.exception.InvalidEmailException
-import com.salmanwahed.contactsapp.domain.exception.InvalidFirstNameException
 import com.salmanwahed.contactsapp.domain.exception.InvalidPhoneNumberException
 import com.salmanwahed.contactsapp.domain.model.Contact
 import com.salmanwahed.contactsapp.domain.usecase.AddContactUseCase
@@ -28,29 +27,27 @@ import javax.inject.Inject
 class AddEditContactViewModel @Inject constructor(
     private val addContactUseCase: AddContactUseCase,
     private val updateContactUseCase: UpdateContactUseCase,
-    private val getContactByIdUseCase: GetContactByIdUseCase,
-    savedStateHandle: SavedStateHandle): ViewModel() {
+    private val getContactByIdUseCase: GetContactByIdUseCase
+    ): ViewModel() {
 
     private val _state = MutableStateFlow(AddEditContactState())
     val state = _state.asStateFlow()
     private val _uiEvent = Channel<AddEditContactUIEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    init {
-        val contactId: String? = savedStateHandle.get("contactId")
-        val id : Int? = contactId?.toIntOrNull() ?: -1
-        if (id != null && id != -1) {
+    fun initWithId(id: Int?) {
+        if (id != null) {
             _state.update { it.copy(isLoading = true) }
             viewModelScope.launch {
                 val contact = getContactByIdUseCase(id)
                 if (contact != null) {
                     _state.update {
                         it.copy(
+                            id = contact.id,
                             firstName = contact.firstName,
                             lastName = contact.lastName,
                             phoneNumber = contact.phoneNumber,
                             email = contact.email,
-                            id = contact.id,
                             pageTitle = "Edit Contact",
                             isLoading = false
                         )
@@ -87,30 +84,33 @@ class AddEditContactViewModel @Inject constructor(
     }
 
     fun saveContact() {
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             try {
                 val currentState = _state.value
                 val contact = Contact(
-                    id = currentState.id ?: -1,
                     firstName = currentState.firstName,
                     lastName = currentState.lastName,
                     phoneNumber = currentState.phoneNumber,
                     email = currentState.email
                 )
-                if (contact.id == -1) {
-                    Log.i("Contact -> Add", contact.toString())
+                if (currentState.id == null) {
                     addContactUseCase(contact)
                 } else {
                     Log.i("Contact -> Update", contact.toString())
+                    contact.id = currentState.id
                     updateContactUseCase(contact)
                 }
-                _state.update { it.copy(isSuccessDialogVisible = true) }
-            } catch (e: InvalidFirstNameException) {
-                _state.update { it.copy(firstNameError = e.message) }
+                _state.update { it.copy(isSuccessDialogVisible = true, isLoading = false) }
+            } catch (e: InvalidContactException) {
+                Log.i(TAG, e.message)
+                _state.update { it.copy(firstNameError = e.message, isLoading = false) }
             } catch (e: InvalidPhoneNumberException) {
-                _state.update { it.copy(phoneNumberError = e.message) }
+                Log.i(TAG, e.message)
+                _state.update { it.copy(phoneNumberError = e.message, isLoading = false) }
             } catch (e: InvalidEmailException) {
-                _state.update { it.copy(emailError = e.message) }
+                Log.i(TAG, e.message)
+                _state.update { it.copy(emailError = e.message, isLoading = false) }
             }
 
         }
@@ -120,5 +120,9 @@ class AddEditContactViewModel @Inject constructor(
         viewModelScope.launch {
             _uiEvent.send(uiEvent)
         }
+    }
+
+    companion object {
+        const val TAG = "ContactApp"
     }
 }
